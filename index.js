@@ -27,6 +27,18 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         const spotsCollection = client.db('touristSpotsDB').collection('spots');
+        const reviewsCollection = client.db('touristSpotsDB').collection('reviews')
+
+        // reviews related apis
+        app.get('/reviews', async (req, res) => {
+            const result = await reviewsCollection.find().toArray();
+            res.send(result);
+        })
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewsCollection.insertOne(review);
+            res.send(result);
+        })
 
         // spots related apis
         app.get('/spots', async (req, res) => {
